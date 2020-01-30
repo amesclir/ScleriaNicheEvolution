@@ -1,0 +1,295 @@
+---
+title: "ScleriaNicheEvolution"
+author: "Marcial Escudero"
+date: "April 16, 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r pressure, echo=FALSE}
+
+library(bayou)
+
+tree <- read.tree("tree.tree")
+mydata <- read.csv("mydata.csv")
+mydata2 <- read.csv("mydata2.csv")
+mydata[,1]  
+setdiff(tree$tip.label, mydata[,1])
+setdiff(mydata[,1],tree$tip.label)
+
+#bio1
+dat.bio1 <- mydata[,2]
+names(dat.bio1) <- mydata[,1]
+se.bio1 <- sqrt(mydata2[,2])
+names(se.bio1) <- mydata2[,1]
+
+priorOU.bio1 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio1), sd=1.5*sd(dat.bio1)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio1 <- priorSim(priorOU.bio1, tree, plot=TRUE, cex=0.5)$pars[[1]]
+
+
+
+
+set.seed(1)
+mcmcOU.bio1 <- bayou.makeMCMC(tree, dat.bio1, SE=se.bio1, prior=priorOU.bio1, 
+                         new.dir=TRUE, outname="modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio1$run(2500000) # Run the MCMC
+chainOU.bio1 <- mcmcOU.bio1$load()
+
+load("./run1/mcmcOU.bio1.Rdata")
+chainOU.bio1 <- set.burnin(chainOU.bio1, 0.3)
+summary.bio1 <- summary(chainOU.bio1)
+par(mfrow=c(3, 5) )
+plot(chainOU.bio1, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio1, burnin = 0.3, pp.cutoff = 0.3, cex = 0.5)
+plotBranchHeatMap(tree, chainOU.bio1, "theta", burnin = 0.3, pal = rainbow, cex = 0.5)
+phenogram.density(tree, dat.bio1, burnin = 0.3, chainOU.bio1, pp.cutoff = 0.3)
+
+
+
+#bio4
+dat.bio4 <- mydata[,5]
+names(dat.bio4) <- mydata[,1]
+se.bio4 <- sqrt(mydata2[,5])
+names(se.bio4) <- mydata2[,1]
+
+priorOU.bio4 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio4), sd=1.5*sd(dat.bio4)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio4 <- priorSim(priorOU.bio4, tree, plot=TRUE, cex=0.5)$pars[[1]]
+
+
+
+
+
+set.seed(1)
+mcmcOU.bio4 <- bayou.makeMCMC(tree, dat.bio4, SE=se.bio4, prior=priorOU.bio4, 
+                         new.dir=TRUE, outname="modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio4$run(2500000) # Run the MCMC
+chainOU.bio4 <- mcmcOU.bio4$load()
+
+load("./run1/mcmcOU.bio4.Rdata")
+chainOU.bio4 <- set.burnin(chainOU.bio4, 0.3)
+summary.bio4 <- summary(chainOU.bio4)
+par(mfrow=c(3, 5) )
+plot(chainOU.bio4, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio4, burnin = 0.3, pp.cutoff = 0.3, cex = 0.5)
+plotBranchHeatMap(tree, chainOU.bio4, "theta", burnin = 0.3, pal = rainbow, cex = 0.5)
+phenogram.density(tree, dat.bio4, burnin = 0.3, chainOU.bio4, pp.cutoff = 0.3)
+
+
+
+
+
+#bio7
+dat.bio7 <- mydata[,8]
+names(dat.bio7) <- mydata[,1]
+se.bio7 <- sqrt(mydata2[,8])
+names(se.bio7) <- mydata2[,1]
+
+priorOU.bio7 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio7), sd=1.5*sd(dat.bio7)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio7 <- priorSim(priorOU.bio7, tree, plot=TRUE, cex=0.5)$pars[[1]]
+
+
+
+
+set.seed(1)
+mcmcOU.bio7 <- bayou.makeMCMC(tree, dat.bio7, SE=se.bio7, prior=priorOU.bio7, 
+                         new.dir=TRUE, outname="modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio7$run(2500000) # Run the MCMC
+chainOU.bio7 <- mcmcOU.bio7$load()
+
+load("./run1/mcmcOU.bio7.Rdata")
+chainOU.bio7 <- set.burnin(chainOU.bio7, 0.3)
+summary.bio7 <- summary(chainOU.bio7)
+par(mfrow=c(3, 5) )
+plot(chainOU.bio7, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio7, burnin = 0.3, pp.cutoff = 0.3, cex = 0.5)
+plotBranchHeatMap(tree, chainOU.bio7, "theta", burnin = 0.3, pal = rainbow, cex = 0.5)
+phenogram.density(tree, dat.bio7, burnin = 0.3, chainOU.bio7, pp.cutoff = 0.3)
+
+
+
+#bio12
+dat.bio12 <- mydata[,13]
+names(dat.bio12) <- mydata[,1]
+se.bio12 <- sqrt(mydata2[,13])
+names(se.bio12) <- mydata2[,1]
+
+priorOU.bio12 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio12), sd=1.5*sd(dat.bio12)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio12 <- priorSim(priorOU.bio12, tree, plot=TRUE, cex=0.5)$pars[[1]]
+
+
+
+
+set.seed(1)
+mcmcOU.bio12 <- bayou.makeMCMC(tree, dat.bio12, SE=se.bio12, prior=priorOU.bio12, 
+                         new.dir=TRUE, outname="modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio12$run(2500000) # Run the MCMC
+chainOU.bio12 <- mcmcOU.bio12$load()
+
+load("./run1/mcmcOU.bio12.Rdata")
+chainOU.bio12 <- set.burnin(chainOU.bio12, 0.3)
+summary.bio12 <- summary(chainOU.bio12)
+par(mfrow=c(3, 5) )
+plot(chainOU.bio12, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio12, burnin = 0.3, edge.type = "none", pp.cutoff = 0.3, cex = 0.5, edge.color = "orange")
+plotBranchHeatMap(tree, chainOU.bio12, "theta", burnin = 0.3, pal = heat.colors, cex = 0.5)
+phenogram.density(tree, dat.bio12, burnin = 0.3, chainOU.bio12, pp.cutoff = 0.3)
+
+
+#bio15
+dat.bio15 <- mydata[,16]
+names(dat.bio15) <- mydata[,1]
+se.bio15 <- sqrt(mydata2[,16])
+names(se.bio15) <- mydata2[,1]
+
+priorOU.bio15 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio15), sd=1.5*sd(dat.bio15)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio15 <- priorSim(priorOU.bio15, tree, plot=TRUE, cex=0.5)$pars[[1]]
+
+
+
+
+set.seed(1)
+mcmcOU.bio15 <- bayou.makeMCMC(tree, dat.bio15, SE=se.bio15, prior=priorOU.bio15, 
+                         new.dir=TRUE, outname="modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio15$run(2500000) # Run the MCMC
+chainOU.bio15 <- mcmcOU.bio15$load()
+
+load("./run1/mcmcOU.bio15.Rdata")
+chainOU.bio15 <- set.burnin(chainOU.bio15, 0.3)
+summary.bio15 <- summary(chainOU.bio15)
+par(mfrow=c(3, 5) )
+plot(chainOU.bio15, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio15, burnin = 0.3, pp.cutoff = 0.3, cex = 0.5)
+plotBranchHeatMap(tree, chainOU.bio15, "theta", burnin = 0.3, pal = terrain.colors, cex = 0.5)
+phenogram.density(tree, dat.bio15, burnin = 0.3, chainOU.bio15, pp.cutoff = 0.3)
+
+
+#bio18
+dat.bio18 <- mydata[,19]
+names(dat.bio18) <- mydata[,1]
+se.bio18 <- sqrt(mydata2[,19])
+names(se.bio18) <- mydata2[,1]
+
+priorOU.bio18 <- make.prior(tree, 
+                      dists=list(dalpha="dhalfcauchy", dsig2="dhalfcauchy", 
+                                 dk="cdpois", dtheta="dnorm"),
+                      param=list(dalpha=list(scale=0.1), dsig2=list(scale=0.1),
+                                 dk=list(lambda=4, kmax=8), dsb=list(bmax=1, prob=1), 
+                                 dtheta=list(mean=mean(dat.bio18), sd=1.5*sd(dat.bio18)))
+)
+
+
+
+
+
+dev.off()
+startpars.bio18 <- priorSim(priorOU.bio18, tree, plot=TRUE, cex=0.5)$pars[[1]]
+priorOU.bio18(startpars.bio18)
+
+
+
+
+set.seed(1)
+mcmcOU.bio18 <- bayou.makeMCMC(tree, dat.bio18, SE=se.bio18, prior=priorOU.bio18, 
+                         new.dir=TRUE, outname="./modelOU_r001", plot.freq=NULL) # Set up the MCMC
+mcmcOU.bio18$run(15000) # Run the MCMC
+chainOU.bio18 <- mcmcOU.bio18$load()
+
+load("run1/mcmcOU.bio18.Rdata")
+chainOU.bio18 <- set.burnin(chainOU.bio18, 0.3)
+summary.bio18 <- summary(chainOU.bio18)
+
+
+
+
+
+par(mfrow=c(3, 5) )
+plot(chainOU.bio18, auto.layout=FALSE)
+
+
+dev.off()
+plotSimmap.mcmc(chainOU.bio18, burnin = 0.3, pp.cutoff = 0.3, cex = 0.5)
+plotBranchHeatMap(tree, chainOU.bio18, "theta", burnin = 0.3, pal = terrain.colors, cex = 0.5)
+phenogram.density(tree, dat.bio18, burnin = 0.3, chainOU.bio18, pp.cutoff = 0.3)
+
+
+
+```
+
