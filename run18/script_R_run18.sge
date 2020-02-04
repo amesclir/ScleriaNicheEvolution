@@ -1,0 +1,8 @@
+#$ -S /bin/bash
+#$ -N R_run18
+#$ -wd /home/aescudero/R/run18/
+#$ -o R_run18.salida
+#$ -e R_run18.err
+#$ -q diaria_simple
+module load R-3.4.2-Bioconductor
+R CMD BATCH script18.R
