@@ -1,0 +1,8 @@
+#$ -S /bin/bash
+#$ -N R_pca3
+#$ -wd /home/aescudero/R/pca3/
+#$ -o R_pca3.salida
+#$ -e R_pca3.err
+#$ -q diaria_simple
+module load R-3.4.2-Bioconductor
+R CMD BATCH script1.R
